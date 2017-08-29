@@ -18,9 +18,10 @@ Goal is to learn Javascript making a ball physics simulation.
 	Verlet integration & 2 pass collision response for stability at rest based on tutorial from:
 	http://codeflow.org/entries/2010/nov/29/verlet-collision-with-impulse-preservation/
 
-	Angled wall collision detection and vector methods modified code from:
+	Angled wall collision detection and vector methods built from:
 	Physics for Games, Animations, and Simulations with HTML5 by Dev Ramtel and Adrian Dobre
 	ISBN-13: 978-1-4302-6338-8
+	Made modifications to angled wall algotrithm for multiple balls stability
 
 	Dependencies:
 	Hammer.js   - Touch library (http://hammerjs.github.io/)
