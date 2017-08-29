@@ -21,7 +21,7 @@ Goal is to learn Javascript! Next major version will use Three.js 3D library.
 	Angled wall collision detection and vector methods built from:
 	Physics for Games, Animations, and Simulations with HTML5 by Dev Ramtel and Adrian Dobre
 	ISBN-13: 978-1-4302-6338-8
-	Made modifications to angled wall algotrithm for multiple balls stability
+	Made modifications to angled wall algotrithm for multiple ball stability
 
 	Dependencies:
 	Hammer.js   - Touch library (http://hammerjs.github.io/)
