@@ -28,7 +28,7 @@ Goal is to learn Javascript! Next major version will use Three.js 3D library.
 	Mainloop.js - Managing main loop & FPS (https://github.com/IceCreamYou/MainLoop.js)
 	Vector2D.js - Basic vector methods 
 	
-	To DO:
+	To Do:
 	- Mac OS Safari window.DeviceMotionEvent not correctly detecting no accelerometer on older Macbook Pro
 	- Add a GUI for phones. The small checkbox on the lower right is hard to see on small devices.
 
