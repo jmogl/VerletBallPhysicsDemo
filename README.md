@@ -6,7 +6,7 @@ Goal is to learn Javascript making a ball physics simulation.
 	iOS does not allow Portrait lock to be set from Javascript or set full screen, so future version will prompt user to lock portrait mode.
 
 	Features:
-	- Touching near a ball will pull it to the mouse or touch location. Spring force will hold it in place when dragged around.
+	- Touching near a ball will pull it to the mouse or touch location. Spring force will hold it in place when dragged
 	- General sloped wall collision detection
 	- Stable stacked balls
 	- Balls move based on gravity vector when tilted on a mobile device
