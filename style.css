@@ -1,0 +1,37 @@
+body {
+    background-color: #666;
+    font-family: Arial,sans-serif;
+    font-size: 20px;
+    height: 100%;
+    letter-spacing: 0.5px;
+    line-height: 1.4;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+#canvas {
+  background-color: #fff;
+}
+
+#fpscounter {
+    position: absolute;
+    bottom: 2px;
+    display: block;
+    left: 20px;
+}
+
+#tilttext{  
+    position: absolute;
+	bottom: 2px;
+    display: block;
+    right: 50px;
+	z-index: 1;
+   }
+
+
+#tiltcheck {
+    position: absolute;
+	bottom: 2px;
+    display: block;
+    right: 20px;
+}
