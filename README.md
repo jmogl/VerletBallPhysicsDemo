@@ -5,7 +5,7 @@ Goal is to learn Javascript! Next major version will use Three.js 3D library.
 	Tested on iPhone & iPad (Chrome and Safari), and Android Nexus 6P. 
 	iOS does not allow Portrait lock to be set from Javascript or full screen mode, so future version will prompt user to lock portrait mode.
 
-	Jeff Miller - Last Update 8/28/17
+	Jeff Miller - Last Update 8/29/17
 	Released under MIT License
 	
 	Features:
