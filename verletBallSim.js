@@ -6,7 +6,7 @@
 
 	Goal is to learn Javascript making a ball physics simulation
 	This app is a work in progress and not intended to be a robust application for every web browser.
-	Tested on iPhone & iPad (Chrome and Safari), and Android Nexus 6P. 
+	Tested on iPhone & iPad (Chrome and Safari), Android Nexus 6P, Chrome & Safari on Mac OS and Chrome on Windows 10. 
 	iOS does not allow Portrait lock to be set from Javascript or set full screen, so future version will prompt user to lock portrait mode
 
 	Features:
