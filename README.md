@@ -14,9 +14,11 @@ Goal is to learn Javascript! Next major version will use Three.js 3D library.
 	- Balls move based on gravity vector when tilted on a mobile device. If mobile device is in landscape, tilt 
 	  mode is turned off and user is prompted to rotate to Portrait with Orientation lock turned on.
 
+	[Ball Physics Demo Webpage](https://jmogl.github.io/VerletBallPhysicsDemo/)	
+	
 	References:
 	Verlet integration & 2 pass collision response for stability at rest based on tutorial from:
-	<a href="http://codeflow.org/entries/2010/nov/29/verlet-collision-with-impulse-preservation/">Web Link</a>
+	http://codeflow.org/entries/2010/nov/29/verlet-collision-with-impulse-preservation/
 
 	Angled wall collision detection and vector methods built from:
 	Physics for Games, Animations, and Simulations with HTML5 by Dev Ramtel and Adrian Dobre
