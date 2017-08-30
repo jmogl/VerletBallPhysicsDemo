@@ -29,6 +29,6 @@ Goal is to learn Javascript! Next major version will use Three.js 3D library.
 	Vector2D.js - Basic vector methods 
 	
 	To Do:
-	- Mac OS Safari window.DeviceMotionEvent not correctly detecting no accelerometer on older Macbook Pro
 	- Add a GUI for phones. The small checkbox on the lower right is hard to see on small devices.
+	- Detect landscape orientation change and turn off tilt mode automatically
 
