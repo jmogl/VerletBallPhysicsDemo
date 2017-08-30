@@ -11,7 +11,7 @@ Goal is to learn Javascript! Next major version will use Three.js 3D library.
 	- Touching near a ball will pull it to the mouse or touch location. Spring force will hold it in place when dragged
 	- General sloped wall collision detection
 	- Stable stacked balls
-	- Balls move based on gravity vector when tilted on a mobile device. If mobile device is in landscape mode, tilt 
+	- Balls move based on gravity vector when tilted on a mobile device. If mobile device is in landscape, tilt 
 	  mode is turned off and user is prompted to rotate to Portrait with Orientation lock turned on.
 
 	References:
