@@ -30,5 +30,4 @@ Goal is to learn Javascript! Next major version will use Three.js 3D library.
 	
 	To Do:
 	- Add a GUI for phones. The small checkbox on the lower right is hard to see on small devices.
-	- Detect landscape orientation change and turn off tilt mode automatically
 
