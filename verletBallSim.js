@@ -40,6 +40,7 @@
 	- Add support for Portrait only mode with gyro for gravity response to tilt - 8/15/17
 	- Simplified inclined wall collision response to improve stability - 8/26/17
 	- Added scaling for gravity and touch velocity across devices (displays) - 8/26/17
+	- Fixed gravity vector initialization for tilt API check so Mac Safari is now working - 8/29/17
 
 	To Do:
 	- Add raytracing :-) (i.e. Use three.js)
