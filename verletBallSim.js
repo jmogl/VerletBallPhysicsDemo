@@ -1,5 +1,5 @@
 /*
-	Ball Physics Simulation Javascript Demo - version 2 (beta) 8/26/17
+	Ball Physics Simulation Javascript Demo - version 2 (beta) 8/29/17
 
 	Copyright: 2017 - Jeff Miller
 	License: MIT
@@ -72,7 +72,7 @@
 	var touch_Lock = false;				// Track if ball object has reached touch position when using "the Force"
 	var touch_Release = false;			// Track when the touch stopped to set velocity from hammer touch
 	
-	var test = 0; 						// Temporary for troubleshooting
+	var troubleshooting = 0; 			// Temporary for using FPS text field for testing
 	
 	var increasedamping = 1; 			// To address jitter when draging a ball along an angled wall
 	
@@ -116,7 +116,8 @@
 
 	if (window.DeviceMotionEvent==undefined) {
 		// Set default gravity to bottom of device: Y-axis
-		gravityVec = Vector2D(0.0,9.8 * gravity_scale);
+		gravityVec = new Vector2D(0.0,9.8 * gravity_scale);
+		
 		}
 		else {
 			window.addEventListener('devicemotion', handleMotionEvent); // Accelerometer gravity vector
@@ -158,21 +159,18 @@
 
 		// check to see if accelerationIncludingGravity is not supported
 		var accelcheck = ax + ay + az;
-		
 		if (accelcheck == 0 || tiltCheckbox.checked == false){ 
-		//	gravityVec = vector2D (0,(9.8 * gravity_scale)*sim_scale);
 			gravityVec.x = 0;
 			gravityVec.y = 9.8 * gravity_scale * sim_scale;
-			tiltCheckbox.checked = false; // uncheck if gravity vector not supported
-		
+			tiltCheckbox.checked = false; // uncheck if gravity vector not supported	
 		} 
-		else {
-		
+		else {		
 			gravityVec.x = ax * gravity_scale;
 			gravityVec.y = ay * gravity_scale*sim_scale;
 		}
 		
-		//console.log("gravityVec.y = " + gravityVec.y);
+//		console.log("gravityVec.x = " + gravityVec.x);
+//		console.log("gravityVec.y = " + gravityVec.y);
 	
 	}
 	
@@ -816,7 +814,7 @@
 		function end(fps, panic) {
 
     		fpsCounter.textContent = parseInt(fps, 10) + ' FPS, Turn on device rotation lock in Portrait Orientation for Tilt mode!!!'; // Mainloop FPS counter text
-//  		fpsCounter.textContent = parseInt(test, 10) + ' FPS, Score = Future Update'; // Use FPS text to temporarily display "test" value
+//	  		fpsCounter.textContent = parseInt(troubleshooting, 10) + ' Troubleshooting'; // Use FPS text to temporarily display "test" value
     		
     		if (panic) {
         		// This pattern introduces non-deterministic behavior, but in this case
