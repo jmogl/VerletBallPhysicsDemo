@@ -3,7 +3,6 @@ Javascript Ball Physics 2D Simulation using Verlet Integration.
 Goal is to learn Javascript! Next major version will use Three.js 3D library.
 	This app is a work in progress and not intended to be a robust application for every web browser.
 	Tested on iPhone & iPad (Chrome and Safari), and Android Nexus 6P. 
-	iOS does not allow Portrait lock to be set from Javascript or full screen mode, so future version will prompt user to lock portrait mode.
 
 	Jeff Miller - Last Update 8/29/17
 	Released under MIT License
@@ -12,7 +11,8 @@ Goal is to learn Javascript! Next major version will use Three.js 3D library.
 	- Touching near a ball will pull it to the mouse or touch location. Spring force will hold it in place when dragged
 	- General sloped wall collision detection
 	- Stable stacked balls
-	- Balls move based on gravity vector when tilted on a mobile device
+	- Balls move based on gravity vector when tilted on a mobile device. If mobile device is in landscape mode, tilt 
+	  mode is turned off and user is prompted to rotate to Portrait with Orientation lock turned on.
 
 	References:
 	Verlet integration & 2 pass collision response for stability at rest based on tutorial from:
