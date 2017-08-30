@@ -6,7 +6,7 @@
 
 	Goal is to learn Javascript making a ball physics simulation
 	This app is a work in progress and not intended to be a robust application for every web browser.
-	Tested on iPhone & iPad (Chrome and Safari), Android Nexus 6P, Chrome & Safari on Mac OS and Chrome on Windows 10. 
+	Tested on iPhone & iPad (Chrome and Safari), and Android Nexus 6P. 
 	iOS does not allow Portrait lock to be set from Javascript or set full screen, so future version will prompt user to lock portrait mode
 
 	Features:
@@ -40,11 +40,10 @@
 	- Add support for Portrait only mode with gyro for gravity response to tilt - 8/15/17
 	- Simplified inclined wall collision response to improve stability - 8/26/17
 	- Added scaling for gravity and touch velocity across devices (displays) - 8/26/17
-	- Fixed gravity vector initialization for tilt API check so Mac Safari is now working - 8/29/17
-
+	- Turned off tilt mode when device is switched to landscape and provide notification to lock portrait mode - 8/26/17
+	
 	To Do:
 	- Add raytracing :-) (i.e. Use three.js)
-	- Identify landscape orientation to turn off tilt mode. 
 	- Add a GUI usable on a phone device. Currently using a check box to turn the gravity tilt mode on and off is hard to see on a phone.
 */
 
@@ -56,13 +55,11 @@
 	var context = canvas.getContext('2d'); 
 	var fpsCounter = document.getElementById('fpscounter');
 	var tiltCheckbox = document.getElementById('tiltcheck');  // Tilt checkbox lower right corner for now...
-	    tiltCheckbox.checked = true;
-		
+	    tiltCheckbox.checked = false;	
 	var bottomBorderHeight = 35; // Text window at the bottom
 
 	var sim_scale = 1; 			// Simulation scaling
 	var gravity_scale = 0.1; 	// Reduce overall gravity. Standard g = 9.8 m/s2
-	
 	var balls_Max = 100;  // Max number of balls on screen	
 
 	// Hammer Touch setup
@@ -73,12 +70,14 @@
 	var touch_Lock = false;				// Track if ball object has reached touch position when using "the Force"
 	var touch_Release = false;			// Track when the touch stopped to set velocity from hammer touch
 	
+	// Other Variables
 	var troubleshooting = 0; 			// Temporary for using FPS text field for testing
-	
 	var increasedamping = 1; 			// To address jitter when draging a ball along an angled wall
-	
 	var gravityVec = new Vector2D(0,0); // Gravity vector
 	var OS_Android = false;				// Check for Android, since x/y coordinates are flipped for gyro gravity vector	
+	var orientchk = true;				// Track device orientation based on window dimensions
+	var tiltsupport = true;				// Used for portrait orientation notification
+	
 
 	// Create a simple Hammer touch instance
 	// by default, it only adds horizontal recognizers
@@ -91,10 +90,28 @@
 		// Reload web page since boundary conditions have changed
 		// Todo: freeze application until device is rotated back to portrait mode
 		window.location.reload(false); //true reloads all resources
+//		getOrientation();
 		
-  };
-  
-	function init() { // initialize the simulation
+  	};
+
+
+	function getOrientation(){
+	   	var orientation = window.innerWidth > window.innerHeight ? "Landscape" : "Portrait";
+
+    	// Turn off tilt mode if device is in Lanscape mode
+		if (orientation == "Landscape"){
+			tiltCheckbox.checked = false;
+			orientchk = false;
+		}else {
+			tiltCheckbox.checked = true;
+			orientchk = true;
+
+		}
+	}
+
+
+	// initialize the simulation
+	function init() { 
 
 	//  Clear console for debugging
 		console.clear();
@@ -102,6 +119,9 @@
 	// Set canvas width just short of full screen to eliminate scroll bars	
 		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
+		
+	// Turn off Tilt mode in landscape (axis flips on iOS)
+		getOrientation();
 		
 	// Scale to standard height of sim is 1200
 		sim_scale = canvas.height / 1200;
@@ -115,22 +135,23 @@
 	// Setup accelerometer support for mobile devices
 //		window.addEventListener('deviceorientation', handleOrientation); // Safari angles not absolute, most likely will not be used.
 
-	if (window.DeviceMotionEvent==undefined) {
-		// Set default gravity to bottom of device: Y-axis
-		gravityVec = new Vector2D(0.0,9.8 * gravity_scale);
+		if (window.DeviceMotionEvent==undefined) {
+			// Set default gravity to bottom of device: Y-axis
+			gravityVec = new Vector2D(0.0,9.8 * gravity_scale);
+			tiltsupport = false;
 		
-		}
-		else {
-			window.addEventListener('devicemotion', handleMotionEvent); // Accelerometer gravity vector
-		}
+			}
+			else {
+				window.addEventListener('devicemotion', handleMotionEvent); // Accelerometer gravity vector
+				tiltsupport = true;
+			}
 
- 	// Check to see if OS is Android since gyro x/y axis are flipped (From StackOverflow)
-	var ua = navigator.userAgent.toLowerCase();
-  	var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
-  	if(isAndroid) {
-    	// Do something!
-    	OS_Android = true;
- 	 	}
+ 		// Check to see if OS is Android since gyro x/y axis are flipped (From StackOverflow)
+		var ua = navigator.userAgent.toLowerCase();
+  		var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+  		if(isAndroid) {
+    		OS_Android = true;
+ 	 		}
  
 	};
 
@@ -160,18 +181,23 @@
 
 		// check to see if accelerationIncludingGravity is not supported
 		var accelcheck = ax + ay + az;
-		if (accelcheck == 0 || tiltCheckbox.checked == false){ 
+
+		if (accelcheck == 0) {
+			tiltsupport = false;
+			}
+
+		if (tiltsupport == false || tiltCheckbox.checked == false){ 
 			gravityVec.x = 0;
 			gravityVec.y = 9.8 * gravity_scale * sim_scale;
-			tiltCheckbox.checked = false; // uncheck if gravity vector not supported	
+			tiltCheckbox.checked = false; // uncheck if gravity vector not supported
+	
 		} 
 		else {		
-			gravityVec.x = ax * gravity_scale;
+			gravityVec.x = ax * gravity_scale*sim_scale;
 			gravityVec.y = ay * gravity_scale*sim_scale;
+			tiltsupport = true;
 		}
 		
-//		console.log("gravityVec.x = " + gravityVec.x);
-//		console.log("gravityVec.y = " + gravityVec.y);
 	
 	}
 	
@@ -794,6 +820,7 @@
                 collide(true);
                 border_collide_preserve_impulse();
             }
+            
             draw();			
 			
 		}
@@ -813,8 +840,13 @@
  		*/
 
 		function end(fps, panic) {
+			if (orientchk == false && tiltsupport == true){
+				var notifytxt = ", Turn on device rotation lock in Portrait Mode when using Tilt mode!"
+				} else {
+				notifytxt = " ";
+			}
 
-    		fpsCounter.textContent = parseInt(fps, 10) + ' FPS, Turn on device rotation lock in Portrait Orientation for Tilt mode!!!'; // Mainloop FPS counter text
+   			fpsCounter.textContent = parseInt(fps, 10) + ' FPS' + notifytxt; // Mainloop FPS counter text
 //	  		fpsCounter.textContent = parseInt(troubleshooting, 10) + ' Troubleshooting'; // Use FPS text to temporarily display "test" value
     		
     		if (panic) {
