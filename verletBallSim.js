@@ -5,7 +5,7 @@
 	
 	Goal is to learn Javascript by developing a ball physics simulation.
 	This app is a work in progress and not intended to be a robust application for every web browser.
-	Tested on iPhone & iPad (Chrome and Safari), Android Nexus 6P, Windows 10 and Mac OSX. 
+	Tested on iPhone & iPad (Chrome and Safari), Android Nexus 6P, Windows 10, and Mac OSX
 	iOS does not allow Portrait lock to be set from Javascript or set full screen, so future version will prompt user to lock portrait mode
 	
 	Features:
@@ -53,35 +53,67 @@
 	var canvas = document.getElementById('canvas');
 	var context = canvas.getContext('2d'); 
 	var fpsCounter = document.getElementById('fpscounter');
-	var tiltCheckbox = document.getElementById('tiltcheck');  // Tilt checkbox lower right corner for now...
+	
+	// Tilt checkbox lower right corner for now...
+	var tiltCheckbox = document.getElementById('tiltcheck');  
 	    tiltCheckbox.checked = false;	
-	var bottomBorderHeight = 35; 		// Text window at the bottom
 
-	var sim_scale = 1;					// Simulation scaling
-	const gravity_scale = 0.1; 			// Reduce overall gravity. Standard g = 9.8 m/s^2
-	const balls_Max = 100;				// Max number of balls on screen	
+	// Text window at the bottom
+	var bottomBorderHeight = 35; 
+
+	// Simulation scaling
+	var sim_scale = 1;
+
+	// Reduce overall gravity. Standard g = 9.8 m/s^2
+	const gravity_scale = 0.1;
+	
+	// Max number of balls on screen. 
+	const balls_Max = 100;
 
 	// Hammer Touch setup
-	var isDragging = false; 			// Screen has been touched
-	var touch_Pos = new Vector2D(0,0);	// Position of touch or mouse
-	var touch_Vel = new Vector2D(0,0);	// Velocity of touch or mouse
-	var touch_Sel = -1;					// Track selected ball number
-	var touch_Lock = false;				// Track if ball object has reached touch position when using "the Force"
-	var touch_Release = false;			// Track when the touch stopped to set velocity from hammer touch
+
+	// Screen has been touched
+	var isDragging = false; 
 	
-	// Other Variables
-	var troubleshooting = 0; 			// Temporary for using FPS text field for testing
-	var increasedamping = 1; 			// To address jitter when draging a ball along an angled wall
-	var gravityVec = new Vector2D(0,0); // Gravity vector
-	var OS_Android = false;				// Check for Android, since x/y coordinates are flipped for gyro gravity vector	
-	var orientchk = true;				// Track device orientation based on window dimensions
-	var tiltsupport = true;				// Used for portrait orientation notification
+	// Position and velocity of touch or mouse
+	var touch_Pos = new Vector2D(0,0);	
+	var touch_Vel = new Vector2D(0,0);	
+	
+	// Track selected ball number
+	var touch_Sel = -1;					
+	
+	// Track if ball object has reached touch position when using "the Force"
+	var touch_Lock = false;				
+	
+	// Track when the touch stopped to set velocity from hammer touch
+	var touch_Release = false;			
+	
+	// Other Variables.....
+	
+	// Temporary for using FPS text field for testing
+	var troubleshooting = 0;
+
+	// To address jitter when draging a ball along an angled wall
+	var increasedamping = 1;
+	
+	// Gravity vector
+	var gravityVec = new Vector2D(0,0); 
+	
+	// Check for Android, since x/y coordinates are flipped for gyro gravity vector
+	var OS_Android = false;
+
+	// Track device orientation based on window dimensions
+	var orientchk = true;
+	
+	// Used for portrait orientation notification
+	var tiltsupport = true;
 	
 	// Create a simple Hammer touch instance
 	// by default, it only adds horizontal recognizers
 	var mc = new Hammer(canvas);
 
-	window.onload = init; // initialize function
+	// Initialize function
+	window.onload = init; 
 
 	// Resize canvas if tablet or phone is rotated
 	window.onresize = function(){
