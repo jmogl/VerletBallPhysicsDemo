@@ -46,8 +46,8 @@
 	- Add a GUI usable on a phone device. Currently using a check box to turn the gravity tilt mode on and off is hard to see on a phone.
 */
 
-
-"use strict"; // Force restrictive declarations. Check for accidental global variables
+	// Force restrictive declarations
+	"use strict"; 
 
 	// Setup Canvas
 	var canvas = document.getElementById('canvas');
