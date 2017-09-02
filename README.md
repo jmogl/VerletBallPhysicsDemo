@@ -5,8 +5,8 @@ Javascript Ball Physics 2D Simulation using Verlet Integration. Goal is to learn
 Jeff Miller 
 Released under MIT License
 
-Features:
-- Touching near a ball will pull it to the mouse or touch location. Spring force will hold it in place when dragged
+**Features:**
+- Touching near a ball will pull it to the mouse or touch location. Spring force will hold it in place when dragged.
 - General sloped wall collision detection
 - Stable stacked balls
 - Balls move based on gravity vector when tilted on a mobile device. If mobile device is in landscape, tilt 
@@ -14,20 +14,19 @@ Features:
 
 [Click here to run the Demo!](https://jmogl.github.io/VerletBallPhysicsDemo/)	
 
-References:
+**References:**
 
-[Verlet Collision with Impulse Preservation, an excellent physics javascript tutorial by Florian Boesch](http://codeflow.org/entries/2010/nov/29/verlet-collision-with-impulse-preservation/). Approach to solving instability when objects are at rest.
+[Verlet Collision with Impulse Preservation, an excellent physics tutorial by Florian Boesch](http://codeflow.org/entries/2010/nov/29/verlet-collision-with-impulse-preservation/). Approach to solving instability when objects are at rest.
 
-Angled wall collision detection and vector methods built from:
+[Physics for Games, Animations, and Simulations with HTML5 by Dev Ramtel and Adrian Dobre, ISBN-13: 978-1-4302-6338-8](https://github.com/devramtal/Physics-for-JavaScript-Games-Animation-Simulations). A great reference for starting out with physics simulations. Made modifications to angled wall collision algorithm for multiple ball stability.
 
-[Physics for Games, Animations, and Simulations with HTML5 by Dev Ramtel and Adrian Dobre, ISBN-13: 978-1-4302-6338-8](https://github.com/devramtal/Physics-for-JavaScript-Games-Animation-Simulations). An excellent reference for starting out with physics simulations. Made modifications to angled wall collision algorithm for multiple ball stability.
+**Dependencies:**
 
-Dependencies:
-
-verletBallSim.js - Physics code
-Hammer.js   - Touch library (http://hammerjs.github.io/)
-Mainloop.js - Managing main loop & FPS (https://github.com/IceCreamYou/MainLoop.js)
+verletBallSim.js - Physics Code
+Hammer.js   - [Touch library](http://hammerjs.github.io/)
+Mainloop.js - [Managing main loop & FPS](https://github.com/IceCreamYou/MainLoop.js)
 Vector2D.js - Basic vector methods 
 
-To Do:
+**To Do:**
 - Add a GUI for phones. The small checkbox on the lower right is hard to see on small devices.
+- Add simple scoring for the funnel
