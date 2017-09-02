@@ -1,6 +1,6 @@
 # Verlet Ball Physics Demo
 
-Javascript Ball Physics 2D Simulation using Verlet Integration. Goal is to learn Javascript along with physics collision simulaton. Next major version will use Three.js 3D library. This app is a work in progress and not intended to be a robust application for every Web browser. Tested on iPhone & iPad (Chrome and Safari), Android Nexus 6P, Windows 10, Mac OSX.
+JavaScript Ball Physics 2D Simulation using Verlet Integration. Project goal is to learn JavaScript along with physics collision simulaton. Next major version will use Three.js 3D library. This demo is a work in progress and not intended to be a robust application for every device / Web browser. Tested on iPhone & iPad (Chrome and Safari), Android Nexus 6P, Windows 10, Mac OSX.
 
 By Jeff Miller. Released under MIT License. Last Update: 9/1/17
 
@@ -15,10 +15,10 @@ By Jeff Miller. Released under MIT License. Last Update: 9/1/17
 **References:**
 - [Verlet Collision with Impulse Preservation](http://codeflow.org/entries/2010/nov/29/verlet-collision-with-impulse-preservation/), an excellent physics tutorial by Florian Boesch. Approach to solving instability when objects are at rest.
 
-- [Physics for Games, Animations, and Simulations with HTML5 by Dev Ramtel and Adrian Dobre, ISBN-13: 978-1-4302-6338-8](https://github.com/devramtal/Physics-for-JavaScript-Games-Animation-Simulations). A great reference for starting out with physics simulations. Made modifications to angled wall collision algorithm for multiple ball stability.
+- [Physics for Games, Animations, and Simulations with HTML5 by Dev Ramtel and Adrian Dobre, ISBN-13: 978-1-4302-6338-8](https://github.com/devramtal/Physics-for-JavaScript-Games-Animation-Simulations). A great reference for starting out with physics simulations in JavaScript. Made modifications to angled wall collision algorithm for multiple ball stability.
 
 **Dependencies:**
-- verletBallSim.js: Physics Code
+- verletBallSim.js: JavaScript physics simulation code
 - Hammer.js: [Touch library](http://hammerjs.github.io/)
 - Mainloop.js: [Managing main loop & FPS](https://github.com/IceCreamYou/MainLoop.js)
 - Vector2D.js:  Basic vector methods 
