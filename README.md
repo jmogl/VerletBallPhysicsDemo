@@ -16,12 +16,11 @@ Features:
 
 References:
 
-[Verlet Collision with Impulse Preservation, an excellent physics javascript tutorial by Florian Boesch](http://codeflow.org/entries/2010/nov/29/verlet-collision-with-impulse-preservation/). Approach to solving jitter instability when objects are at rest.
+[Verlet Collision with Impulse Preservation, an excellent physics javascript tutorial by Florian Boesch](http://codeflow.org/entries/2010/nov/29/verlet-collision-with-impulse-preservation/). Approach to solving instability when objects are at rest.
 
 Angled wall collision detection and vector methods built from:
-Physics for Games, Animations, and Simulations with HTML5 by Dev Ramtel and Adrian Dobre. ISBN-13: 978-1-4302-6338-8
 
-Made modifications to angled wall algorithm for multiple ball stability
+[Physics for Games, Animations, and Simulations with HTML5 by Dev Ramtel and Adrian Dobre, ISBN-13: 978-1-4302-6338-8](https://github.com/devramtal/Physics-for-JavaScript-Games-Animation-Simulations). An excellent reference for starting out with physics simulations. Made modifications to angled wall collision algorithm for multiple ball stability.
 
 Dependencies:
 
