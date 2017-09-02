@@ -69,9 +69,6 @@ var sim_scale = 1;
 // Reduce overall gravity. Standard g = 9.8 m/s^2
 const gravity_scale = 0.1;
 
-// Max number of balls on screen. 
-const balls_Max = 100;
-
 /*
 * Hammer Touch setup
 */
@@ -329,16 +326,33 @@ Line.prototype = {
 
 var Simulation = function(context){
 	var bodies = this.bodies = [];
-	var width = context.canvas.width;
-	var height = context.canvas.height - bottomBorderHeight;// Leave space at bottom because of iOS control screen drag up
-	var damping = 0.8;	// Energy loss on collision (1=elastic)
-	var interval;
-	var walls = new Array();	// for interior collision detection 
-	const G = 1; 	// Gravity body constant for nearest ball attraction during touch
-	var useTheForce = new Vector2D(0.0, 0.0); // Gravity force to attract nearest ball to touch position
-	var initwallcheck = false;	// Check for wall side setup
-	var colors = ['#0000ff', '#ff0000', '#00ff00', '#ffa500'];	// Blue, Red, Vibrant Green, Orange
 
+	// Leave space at bottom because of iOS control screen drag up with finger swipe
+	var width = context.canvas.width;
+	var height = context.canvas.height - bottomBorderHeight; 
+	
+	// Energy loss on collision (1=elastic)
+	var damping = 0.8;	
+	var interval;
+	
+	// for interior collision detection
+	var walls = new Array();	
+	
+	// Gravity body constant for nearest ball attraction during touch (1 for now)
+	const G = 1; 	
+	
+	// Gravity force to attract nearest ball to touch position
+	var useTheForce = new Vector2D(0.0, 0.0); 
+	
+	// Check for wall side setup
+	var initwallcheck = false;	
+	
+	// Blue, Red, Vibrant Green, Orange
+	var colors = ['#0000ff', '#ff0000', '#00ff00', '#ffa500'];	
+	
+	// Max number of balls on screen. 
+	const balls_Max = 100;
+	
 	while(bodies.length < balls_Max){
 
 		// bodies(x,y,radius,color,mass) - All random
