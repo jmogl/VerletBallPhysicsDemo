@@ -22,13 +22,11 @@
 *	ISBN-13: 978-1-4302-6338-8
 *	
 *	Dependencies:
-*	verletBallSim.js	- Physics Simulation
+*	verletBallSim.js		- Physics Simulation
 *	Hammer.js			- Touch library (http://hammerjs.github.io/)
 *	Mainloop.js			- Managing main loop & FPS (https://github.com/IceCreamYou/MainLoop.js)
 *	Vector2D.js			- Basic vector methods 
-*/
-
-/*
+*
 *	Change Log: 
 *	- Setup Hammer.js (Done, note: not compatible with Jquery)
 *	- Fix memory leak (Done, 7/22/17 - Using Mainloop.js library to manage FPS)
@@ -40,7 +38,7 @@
 *	- Simplified inclined wall collision response to improve stability - 8/26/17
 *	- Added scaling for gravity and touch velocity across devices (displays) - 8/26/17
 *	- Turned off tilt mode when device is switched to landscape and provide notification to lock portrait mode - 8/26/17
-*	- Moved to GitHub, cleaned up formatting - 9/1/17
+*	- Cleaned up formatting for GitHub - 9/1/17
 *	
 *	To Do:
 *	- Add simple count for the funnel
@@ -51,7 +49,9 @@
 // Force restrictive declarations
 "use strict"; 
 
-// Setup Canvas
+// Setup System Globals
+
+// Canvas and Frames Per Second (FPS) Text Counter
 var canvas = document.getElementById('canvas');
 var context = canvas.getContext('2d'); 
 var fpsCounter = document.getElementById('fpscounter');
@@ -72,8 +72,9 @@ const gravity_scale = 0.1;
 // Max number of balls on screen. 
 const balls_Max = 100;
 
-// Hammer Touch setup
-
+/*
+* Hammer Touch setup
+*/
 // Screen has been touched
 var isDragging = false; 
 
@@ -90,7 +91,9 @@ var touch_Lock = false;
 // Track when the touch stopped to set velocity from hammer touch
 var touch_Release = false;			
 
-// Other Variables.....
+/*
+* Misc Variables
+*/
 
 // Temporary for using FPS text field for testing
 var troubleshooting = 0;
@@ -203,8 +206,7 @@ function handleMotionEvent(event) {
 		gravityVec.x = 0;
 		gravityVec.y = 9.8 * gravity_scale * sim_scale;
 		tiltCheckbox.checked = false; // uncheck if gravity vector not supported
-	} 
-	else {		
+	} else {		
 		gravityVec.x = ax * gravity_scale*sim_scale;
 		gravityVec.y = ay * gravity_scale*sim_scale;
 		tiltsupport = true;
@@ -383,15 +385,13 @@ var Simulation = function(context){
 	// Define line for bottom border. Not using interior wall for maximum stability since they have added impulse
 	var bottomBorder = new Line(new Vector2D(0,height),new Vector2D(width,height));
 
-	// Interior angled walls (Funnel)
+	// Interior angled walls with collision detection (i.e. The Funnel)
 	while(walls.length < 2 ){
 
 		// Scaling for width and height
 		var wall1=new Wall(new Vector2D((width/3),height/6),new Vector2D((width/2.2),height/3.5));
-//		var wall1=new Wall(new Vector2D((width/3),height/6),new Vector2D((width/2),height/3.5));
 		walls.push(wall1);
 			
-//		var wall2=new Wall(new Vector2D(width*0.68,height/6),new Vector2D((width/2),height/3.5));
 		var wall2=new Wall(new Vector2D(width*0.68,height/6),new Vector2D((width/1.8),height/3.5));
 		walls.push(wall2);
 	}
@@ -423,8 +423,8 @@ var Simulation = function(context){
 					touch_Sel = i; 
 					}
 				}
+			
 			console.log("Ball " + touch_Sel + " Selected");
-
 		}
 	}
 
@@ -570,8 +570,7 @@ var Simulation = function(context){
 			// wall side = 1
 			if (initwallcheck == false){
 				wall.objwallside.push(1); //Load track ball location for tunneling check into array
-			}
-			else {
+			} else {
 				wall.objwallside[objnum] = 1; // Update wall side check
 			}
 
@@ -581,8 +580,7 @@ var Simulation = function(context){
 				
 			// wall side = -1
 				wall.objwallside.push(-1); //Load track ball location for tunneling check into array
-			}
-			else {
+			} else {
 				wall.objwallside[objnum] = -1; // Update wall side check
 			}
 		}
@@ -621,7 +619,7 @@ var Simulation = function(context){
 					
 				if (wall.objwallside[j]*dist.dotProduct(wall.normal) < 0){
 					testTunneling = true;
-				}else{
+				} else {
 					testTunneling = false;
 				}	
 					
@@ -652,7 +650,7 @@ var Simulation = function(context){
 					
 					if (testTunneling == false){
 						var displ = dist.para(deltaS);
-					} else{
+					} else {
 						displ = dist.para(-deltaS);
 					}
 						
@@ -667,14 +665,12 @@ var Simulation = function(context){
 					var tangentVelo = Velo.subtract(normalVelo);
 						
 					// Flip normal post impact * damping factor
-					obj.previousvel = tangentVelo.addScaled(normalVelo,-walldamping*increasedamping); 
-						
+					obj.previousvel = tangentVelo.addScaled(normalVelo,-walldamping*increasedamping); 						
 					obj.previouspos = obj.position.subtract(obj.previousvel);
 						
 					if (testTunneling){
 						wall.objwallside[j] *= -1;
 					}
-		
 					hasHitAWall = true;
 					console.log("hasHitAwall = " + hasHitAWall);
 				}
@@ -797,8 +793,7 @@ var Simulation = function(context){
 	*	The simulation maintains a list of all bodies and runs this method for each simulation step:
 	*	Gravity accumulates the gravitational acceleration on bodies, accelerate moves the bodies according to acceleration. 
 	*	Note that this results in a higher velocity (as it should) in the verlet integration scheme, since the current position 
-	*	moved away further from the previous position.
-	*	Collide resolves body vs. body constraints (two spheres may not overlap)
+	*	moved away further from the previous position. Collide resolves body vs. body constraints (two spheres may not overlap)
 	*	
 	*	Acceleration at rest and ghost impulse (i.e. jitter):
 	*	If you think about the problem it's obvious why the ghost impulse is introduced. If a sphere lies at rest in equilibrium 
@@ -809,8 +804,7 @@ var Simulation = function(context){
 	*	cancel acceleration impulse out when in equilibrium.
 	*	The resulting velocity remaining after step 1 must have been unconstrained, therefore it is now real impulse, so we can 
 	*	move the object by its inertia and preserve its impulse when constrained.
-	*/
-		
+	*/		
 	var step = function(){
 		var steps = 2; // 2 original steps; increase steps per interval for increased accuracy
 		var delta = 1/steps;
@@ -828,7 +822,7 @@ var Simulation = function(context){
 		draw();
 	}
 
-	// Start the main loop using Mainloop.js library
+	// Start the main loop using Mainloop.js library to manage FPS
 	MainLoop.setUpdate(step).setDraw(draw).setEnd(end).start();
 	/*
 	* MainLoop end function
