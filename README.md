@@ -4,7 +4,7 @@ Goal is to learn Javascript! Next major version will use Three.js 3D library.
 	This app is a work in progress and not intended to be a robust application for every web browser.
 	Tested on iPhone & iPad (Chrome and Safari), and Android Nexus 6P. 
 
-	Jeff Miller - Last Update 8/29/17
+	Jeff Miller 
 	Released under MIT License
 	
 	Features:
@@ -16,6 +16,11 @@ Goal is to learn Javascript! Next major version will use Three.js 3D library.
 
 	[Ball Physics Demo Webpage](https://jmogl.github.io/VerletBallPhysicsDemo/)	
 	
+	test link:
+	
+	<a href="http://en.wikipedia.org/wiki/Petersen_graph">Petersen Graph</a>
+	
+	
 	References:
 	Verlet integration & 2 pass collision response for stability at rest based on tutorial from:
 	http://codeflow.org/entries/2010/nov/29/verlet-collision-with-impulse-preservation/
@@ -26,6 +31,8 @@ Goal is to learn Javascript! Next major version will use Three.js 3D library.
 	Made modifications to angled wall algorithm for multiple ball stability
 
 	Dependencies:
+	
+	verletBallSim.js - Physics code
 	Hammer.js   - Touch library (http://hammerjs.github.io/)
 	Mainloop.js - Managing main loop & FPS (https://github.com/IceCreamYou/MainLoop.js)
 	Vector2D.js - Basic vector methods 
