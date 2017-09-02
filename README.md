@@ -22,7 +22,7 @@ By Jeff Miller. Released under MIT License. Last Update: 9/1/17
 - Hammer.js: [Touch library](http://hammerjs.github.io/)
 - Mainloop.js: [Managing main loop & FPS](https://github.com/IceCreamYou/MainLoop.js)
 - Vector2D.js:  Vector methods
-- index.html: Web page framework
+- index.html: Web page to launch the app
 - style.css: Cascading style sheet for web page formatting
 
 **To Do:**
