@@ -20,7 +20,7 @@ Released under MIT License
 
 [Physics for Games, Animations, and Simulations with HTML5 by Dev Ramtel and Adrian Dobre, ISBN-13: 978-1-4302-6338-8](https://github.com/devramtal/Physics-for-JavaScript-Games-Animation-Simulations). A great reference for starting out with physics simulations. Made modifications to angled wall collision algorithm for multiple ball stability.
 
-**Dependencies:**
+**Dependencies (In Lib Folder):**
 
 - verletBallSim.js: Physics Code
 - Hammer.js: [Touch library](http://hammerjs.github.io/)
