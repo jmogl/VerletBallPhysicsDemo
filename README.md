@@ -12,11 +12,11 @@ Features:
 - Balls move based on gravity vector when tilted on a mobile device. If mobile device is in landscape, tilt 
   mode is turned off and user is prompted to rotate to Portrait with Orientation lock turned on.
 
-Click link to run the demo: [Ball Physics Demo Webpage](https://jmogl.github.io/VerletBallPhysicsDemo/)	
+[Click here to run the Demo!](https://jmogl.github.io/VerletBallPhysicsDemo/)	
 
 References:
 
-Verlet Collision with Impulse Preservation excellent tutorial blog by Florian Boesch. Approach to solving jitter instability when objects are at rest. [Link](http://codeflow.org/entries/2010/nov/29/verlet-collision-with-impulse-preservation/)
+[Verlet Collision with Impulse Preservation excellent tutorial blog by Florian Boesch](http://codeflow.org/entries/2010/nov/29/verlet-collision-with-impulse-preservation/) Approach to solving jitter instability when objects are at rest.
 
 Angled wall collision detection and vector methods built from:
 Physics for Games, Animations, and Simulations with HTML5 by Dev Ramtel and Adrian Dobre. ISBN-13: 978-1-4302-6338-8
