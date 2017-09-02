@@ -1,6 +1,6 @@
 # Verlet Ball Physics Demo
 
-Javascript Ball Physics 2D Simulation using Verlet Integration. Goal is to learn Javascript along with physics collision simulaton. Next major version will use Three.js 3D library. This app is a work in progress and not intended to be a robust application for every Web browser. Tested on iPhone & iPad (Chrome and Safari), Android Nexus 6P, Windows 10, Mac OSX (Chrome & Safari).
+Javascript Ball Physics 2D Simulation using Verlet Integration. Goal is to learn Javascript along with physics collision simulaton. Next major version will use Three.js 3D library. This app is a work in progress and not intended to be a robust application for every Web browser. Tested on iPhone & iPad (Chrome and Safari), Android Nexus 6P, Windows 10, Mac OSX.
 
 By Jeff Miller. Released under MIT License. Last Update: 9/1/17
 
@@ -8,8 +8,7 @@ By Jeff Miller. Released under MIT License. Last Update: 9/1/17
 - Touching near a ball will pull it to the mouse or touch location. Spring force will hold it in place when dragged, but the ball can get dropped.
 - General sloped wall collision detection
 - Stable stacked balls
-- Balls move based on gravity vector when tilted on a mobile device. If mobile device is in landscape, tilt 
-  mode is turned off and user is prompted to rotate to Portrait with Orientation lock turned on.
+- Balls move based on gravity vector when tilted on a mobile device. If mobile device is in landscape, tilt mode is turned off and user is prompted to rotate to Portrait with Orientation lock turned on. A small check box at the lower right can toggle on and off, which works best on a tablet for now due to font size.
 
 [Click here to run the Demo!](https://jmogl.github.io/VerletBallPhysicsDemo/)	
 
@@ -24,7 +23,7 @@ By Jeff Miller. Released under MIT License. Last Update: 9/1/17
 - Mainloop.js: [Managing main loop & FPS](https://github.com/IceCreamYou/MainLoop.js)
 - Vector2D.js:  Basic vector methods 
 - index.html: Web page framework
-- style.css: Cascading style sheet for formatting
+- style.css: Cascading style sheet for web page formatting
 
 **To Do:**
 - Add a GUI for phones. The small checkbox on the lower right is hard to see on small devices.
