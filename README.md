@@ -21,7 +21,7 @@ By Jeff Miller. Released under MIT License. Last Update: 9/1/17
 - verletBallSim.js: JavaScript physics simulation code
 - Hammer.js: [Touch library](http://hammerjs.github.io/)
 - Mainloop.js: [Managing main loop & FPS](https://github.com/IceCreamYou/MainLoop.js)
-- Vector2D.js:  Basic vector methods 
+- Vector2D.js:  Vector methods
 - index.html: Web page framework
 - style.css: Cascading style sheet for web page formatting
 
