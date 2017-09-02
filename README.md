@@ -22,11 +22,12 @@ Released under MIT License
 
 **Dependencies:**
 
-verletBallSim.js - Physics Code
-Hammer.js   - [Touch library](http://hammerjs.github.io/)
-Mainloop.js - [Managing main loop & FPS](https://github.com/IceCreamYou/MainLoop.js)
-Vector2D.js - Basic vector methods 
+- verletBallSim.js: Physics Code
+- Hammer.js: [Touch library](http://hammerjs.github.io/)
+- Mainloop.js: [Managing main loop & FPS](https://github.com/IceCreamYou/MainLoop.js)
+- Vector2D.js:  Basic vector methods 
 
 **To Do:**
 - Add a GUI for phones. The small checkbox on the lower right is hard to see on small devices.
 - Add simple scoring for the funnel
+- Incorporate Three.js library for 3D
