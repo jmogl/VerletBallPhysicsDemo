@@ -19,8 +19,8 @@ By Jeff Miller. Released under MIT License. Last Update: 9/1/17
 
 **Dependencies:**
 - verletBallSim.js: JavaScript physics simulation code
-- Hammer.js: [Touch library](http://hammerjs.github.io/)
-- Mainloop.js: [Managing main loop & FPS](https://github.com/IceCreamYou/MainLoop.js)
+- [Hammer.js](http://hammerjs.github.io/): Touch library
+- [Mainloop.js](https://github.com/IceCreamYou/MainLoop.js):Managing main loop & FPS
 - Vector2D.js:  Vector methods
 - index.html: Web page to launch the app
 - style.css: Cascading style sheet for web page formatting
