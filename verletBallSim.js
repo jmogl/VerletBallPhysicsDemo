@@ -164,7 +164,7 @@ function init() {
 	if (window.DeviceMotionEvent==undefined) {		
 		
 		console.log("test");
-		console.log(window.DeviceMotionEvent);
+//		console.log(window.DeviceMotionEvent);
 		
 		// Set default gravity to bottom of device: Y-axis
 		gravityVec = new Vector2D(0.0,9.8 * gravity_scale);
@@ -172,10 +172,12 @@ function init() {
 		}
 		else {
 			console.log("test2");
-			console.log(window.DeviceMotionEvent);
+//			console.log(window.DeviceMotionEvent);
 			
 			window.addEventListener('devicemotion', handleMotionEvent); // Accelerometer gravity vector
-			tiltsupport = true;
+//			tiltsupport = true;
+			tiltsupport = false;
+			
 	}
 
 	// Check to see if OS is Android since gyro x/y axis are flipped (From Stack Overflow)
