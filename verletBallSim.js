@@ -356,7 +356,7 @@ var Simulation = function(context){
 	var colors = ['#0000ff', '#ff0000', '#00ff00', '#ffa500'];	
 	
 	// Max number of balls on screen. 
-	const balls_Max = 10;
+	const balls_Max = 20;
 	
 	while(bodies.length < balls_Max){
 
