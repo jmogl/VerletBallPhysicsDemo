@@ -163,6 +163,7 @@ function init() {
 	// Setup accelerometer support for mobile devices
 	if (window.DeviceMotionEvent==undefined) {		
 		
+		console.log("test");
 		console.log(window.DeviceMotionEvent);
 		
 		// Set default gravity to bottom of device: Y-axis
@@ -170,7 +171,7 @@ function init() {
 		tiltsupport = false;
 		}
 		else {
-			
+			console.log("test2");
 			console.log(window.DeviceMotionEvent);
 			
 			window.addEventListener('devicemotion', handleMotionEvent); // Accelerometer gravity vector
