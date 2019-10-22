@@ -171,8 +171,8 @@ console.log(window.DeviceMotionEvent);
 		tiltsupport = false;
 		}
 		else {
-			window.addEventListener('devicemotion', handleMotionEvent); // Accelerometer gravity vector
-			tiltsupport = true;
+//			window.addEventListener('devicemotion', handleMotionEvent); // Accelerometer gravity vector
+//			tiltsupport = true;
 	}
 
 	// Check to see if OS is Android since gyro x/y axis are flipped (From Stack Overflow)
