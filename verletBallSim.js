@@ -163,6 +163,9 @@ function init() {
 	// Setup accelerometer support for mobile devices
 	if (window.DeviceMotionEvent==undefined) {
 		
+console.log(window.DeviceMotionEvent);
+		
+		
 		// Set default gravity to bottom of device: Y-axis
 		gravityVec = new Vector2D(0.0,9.8 * gravity_scale);
 		tiltsupport = false;
