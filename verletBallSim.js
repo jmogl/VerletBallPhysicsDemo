@@ -1,12 +1,12 @@
 /*
-*	Ball Physics Simulation Javascript Demo - Version 2 - 8/31/17
-*	Copyright: 2017 - Jeff Miller
+*	Ball Physics Simulation Javascript Demo - Version 2.11 7/23/25
+*       
+*	Copyright: 2017+  Jeff Miller
 *	License: MIT
 *	
 *	Goal is to learn Javascript by developing a ball physics simulation.
 *	This app is a work in progress and not intended to be a robust application for every web browser.
-*	Tested on iPhone & iPad (Chrome and Safari), Android Nexus 6P, Windows 10, and Mac OSX
-*	iOS does not allow Portrait lock to be set from Javascript or set full screen, so future version will prompt user to lock portrait mode
+*	iOS does not allow Portrait lock to be set from Javascript or set full screen, so simulation pauses in Landscape mode
 *	
 *	Features:
 *	- Touching near a ball will pull it to the mouse or touch location. Spring force will hold it in place when dragged around.
@@ -22,7 +22,7 @@
 *	ISBN-13: 978-1-4302-6338-8
 *	
 *	Dependencies:
-*	verletBallSim.js		- Physics Simulation
+*	verletBallSim.js	- Physics Simulation
 *	Hammer.js			- Touch library (http://hammerjs.github.io/)
 *	Mainloop.js			- Managing main loop & FPS (https://github.com/IceCreamYou/MainLoop.js)
 *	Vector2D.js			- Basic vector methods 
@@ -39,11 +39,21 @@
 *	- Added scaling for gravity and touch velocity across devices (displays) - 8/26/17
 *	- Turned off tilt mode when device is switched to landscape and provide notification to lock portrait mode - 8/26/17
 *	- Cleaned up formatting for GitHub - 9/1/17
+*   	- 7/22/25 Updates:
+*     		Added permission check to us gyro on iOS devices -7/20/25
+*     		Added inverse funnel
+*     		Updated to stop simulation in landscape mode for mobile devices 
+*     		Added a button to turn on Tilt mode (Gyro) on / off
+*		Added "0G" toggle for desktop 
+*		Updated OS Check for iOS & Android (Google Pixel 11). Other devices may not work properly in "Tilt" mode
+*			
 *	
 *	To Do:
-*	- Add simple count for the funnel
-*	- Add raytracing :-) (i.e. Use three.js)
-*	- Add a GUI usable on a phone device. Currently using a check box to turn the gravity tilt mode on and off is hard to see on a phone.
+*
+*	- May add an option to dynamically change the interior wall obstructions, but need to fix an issue where the ball sticks if the wall is shallow. 
+*	- Every once in a while, the collision detection adds energy and balls explode due to a singularity probably from the wall edge collision detection.  
+*	- Replace the Enable Tilt button with a proper pop up menu
+*	- Switch from Canvas to webgl using three.js. 
 */
 
 // Force restrictive declarations
@@ -56,18 +66,18 @@ var canvas = document.getElementById('canvas');
 var context = canvas.getContext('2d'); 
 var fpsCounter = document.getElementById('fpscounter');
 
-// Tilt checkbox lower right corner for now...
-var tiltCheckbox = document.getElementById('tiltcheck');  
-	tiltCheckbox.checked = false;	
+let simulationPaused = false; // Pause if in Landscape on mobile device
+
+let tiltEnabled = false; // Track if tilt button is selected for mobile devices
 
 // Text window at the bottom
-var bottomBorderHeight = 35; 
+var bottomBorderHeight = 55; 
 
 // Simulation scaling
 var sim_scale = 1;
 
 // Reduce overall gravity. Standard g = 9.8 m/s^2
-const gravity_scale = 0.1;
+const gravity_scale = 0.05;
 
 /*
 * Hammer Touch setup
@@ -92,17 +102,21 @@ var touch_Release = false;
 * Misc Variables
 */
 
-// Temporary for using FPS text field for testing
-var troubleshooting = 0;
-
 // To address jitter when draging a ball along an angled wall
 var increasedamping = 1;
 
 // Gravity vector
-var gravityVec = new Vector2D(0,0); 
+//var gravityVec = new Vector2D(0,0); 
+var gravityVec = new Vector2D(0.0, 9.8 * gravity_scale);
 
 // Check for Android, since x/y coordinates are flipped for gyro gravity vector
 var OS_Android = false;
+
+// Check for iPAD 
+var OS_iPAD = false;
+
+// Check for iOS
+var OS_iOS = false;
 
 // Track device orientation based on window dimensions
 var orientchk = true;
@@ -119,102 +133,234 @@ window.onload = init;
 // Resize canvas if tablet or phone is rotated
 window.onresize = function(){
 
+/*
 	// Reload web page since boundary conditions have changed
-	// Todo: freeze application until device is rotated back to portrait mode
+	// Freeze simulation until device is rotated back to portrait mode
 	window.location.reload(false); //true reloads all resources
+*/
+    getOrientation();
+    // Optionally adjust canvas size here if needed
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
 };
 
-function getOrientation(){
-	var orientation = window.innerWidth > window.innerHeight ? "Landscape" : "Portrait";
+/*
+ * Detects the user's operating system and sets the global OS flags.
+ * Should be called once when the simulation initializes.
+ */
+function detectOperatingSystem() {
+	const ua = navigator.userAgent;
+	const hasTouch = "ontouchend" in document;
 
-	// Turn off tilt mode if device is in Landscape mode
-	if (orientation == "Landscape"){
-		tiltCheckbox.checked = false;
-		orientchk = false;
-	}else {
-		tiltCheckbox.checked = true;
-		orientchk = true;
+	// Check for iPad first, as it's the most specific iOS case.
+	// The second condition is for modern iPadOS which can pretend to be a Mac.
+	if (ua.includes("iPad") || (ua.includes("Macintosh") && hasTouch)) {
+		OS_iPAD = true;
+	//	OS_iOS = true; // An iPad is also an iOS device.
+	}
+	// Check for other iOS devices like iPhone or iPod.
+	else if (/iPhone|iPod/.test(ua)) {
+		OS_iOS = true;
+	}
+	// Check for the "Android" keyword in the User Agent.
+	else if (/Android/i.test(ua)) {
+		OS_Android = true;
+	}
+	// Fallback for other mobile devices (like a Pixel in desktop mode).
+	// If it has a touch screen and wasn't identified as iOS, treat it as Android.
+	else if (hasTouch) {
+		OS_Android = true;
 	}
 }
 
-// initialize the simulation
-function init() { 
+/*
+ * Checks if the device is a mobile device based on the OS flags.
+ * This function relies on detectOperatingSystem() having been run.
+ * @returns {boolean} True if the device is detected as iOS or Android.
+ */
+function isMobileDevice() {
+	return OS_iOS || OS_iPAD || OS_Android;
+}
 
+function isPortrait() {
+  return window.matchMedia("(orientation: portrait)").matches;
+}
+
+function isLandscape() {
+  return window.matchMedia("(orientation: landscape)").matches;
+}
+
+function getOrientation(){
+	var orientation = window.innerWidth > window.innerHeight ? "Landscape" : "Portrait";
+    const wasPaused = simulationPaused;
+    const inLandscape = isLandscape();
+
+    if (isMobileDevice()) {
+        simulationPaused = inLandscape;
+        orientchk = !inLandscape;
+
+        if (wasPaused !== simulationPaused) {
+            console.log("Orientation changed. Paused: " + simulationPaused);
+        }
+    }
+
+}
+
+// iOS requires user permission to turn on Gyro accelerometer
+async function requestOrientationPermission() {
+	// Only needed on iOS 13+ where permission is required
+	if (typeof DeviceOrientationEvent !== "undefined" &&
+			typeof DeviceOrientationEvent.requestPermission === "function") {
+		try {
+			const response = await DeviceOrientationEvent.requestPermission();
+			if (response === "granted") {
+				console.log("Device orientation permission granted.");
+				window.addEventListener('devicemotion', handleMotionEvent);
+				tiltsupport = true;
+			} else {
+				console.warn("Device orientation permission denied.");
+				gravityVec = new Vector2D(0.0, 9.8 * gravity_scale);
+				tiltsupport = false;
+			}
+		} catch (e) {
+			console.error("Error requesting orientation permission:", e);
+			gravityVec = new Vector2D(0.0, 9.8 * gravity_scale);
+			tiltsupport = false;
+		}
+	} else {
+		// Other platforms: just add listener directly
+		window.addEventListener('devicemotion', handleMotionEvent);
+		tiltsupport = true;
+	}
+}
+
+
+// initialize the simulation
+function init() {
 	// Clear console for debugging
 	console.clear();
 
-	// Set canvas width just short of full screen to eliminate scroll bars	
+	detectOperatingSystem(); // Detect OS
+
+	// Set canvas width just short of full screen to eliminate scroll bars
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
 
 	// Turn off Tilt mode in landscape (axis flips on iOS)
 	getOrientation();
-	
+
 	// Scale to standard height of sim is 1200
 	sim_scale = canvas.height / 1200;
 
 	// Set the Hammer pan gesture to support all directions.
-	// this will block the vertical scrolling on a touch-device while on the element
 	mc.get('pan').set({ direction: Hammer.DIRECTION_ALL });
-		
+
 	var simulation = new Simulation(context);
+	const enableBtn = document.getElementById("enableTiltButton");
 
-	// Setup accelerometer support for mobile devices
-	if (window.DeviceMotionEvent==undefined) {		
-		
-		console.log("test");
-//		console.log(window.DeviceMotionEvent);
-		
-		// Set default gravity to bottom of device: Y-axis
-		gravityVec = new Vector2D(0.0,9.8 * gravity_scale);
-		tiltsupport = false;
+	// Reliably check if it's a mobile device using the function already in your file.
+	const mobileDevice = isMobileDevice();
+
+	// Set the initial button text correctly for desktop users.
+	if (!mobileDevice) {
+		enableBtn.textContent = "Toggle Gravity Off";
+	}
+
+	// This is now the one and only click handler, with clean, separate logic paths.
+	enableBtn.addEventListener("click", () => {
+		// --- PATH 1: Logic for Mobile Devices ---
+		if (mobileDevice) {
+			// If tilt is currently off, try to turn it on.
+			if (!tiltEnabled) {
+				requestOrientationPermission().then(() => {
+					// The 'tiltsupport' flag is set inside the requestOrientationPermission function.
+					if (tiltsupport) {
+						tiltEnabled = true;
+						enableBtn.textContent = "Disable Tilt";
+						console.log("Tilt enabled");
+					}
+				});
+			}
+			// If tilt is currently on, turn it off.
+			else {
+				tiltEnabled = false;
+				tiltsupport = false; // Resetting this is good practice
+				gravityVec = new Vector2D(0.0, 9.8 * gravity_scale);
+				enableBtn.textContent = "Enable Tilt";
+				console.log("Tilt disabled");
+			}
 		}
+		// --- PATH 2: Logic for Desktops ---
 		else {
-			console.log("test2");
-//			console.log(window.DeviceMotionEvent);
-			
-			window.addEventListener('devicemotion', handleMotionEvent); // Accelerometer gravity vector
-//			tiltsupport = true;
-			tiltsupport = false;
-			
-	}
+			// If gravity is ON (represented by tiltEnabled = false), turn it OFF.
+			if (!tiltEnabled) {
+				tiltEnabled = true; // Use this global flag to track the gravity state.
+				gravityVec = new Vector2D(0.0, 0.0);
+				enableBtn.textContent = "Toggle Gravity On";
+				console.log("Gravity disabled");
+			}
+			// If gravity is OFF (represented by tiltEnabled = true), turn it ON.
+			else {
+				tiltEnabled = false;
+				gravityVec = new Vector2D(0.0, 9.8 * gravity_scale);
+				enableBtn.textContent = "Toggle Gravity Off";
+				console.log("Gravity enabled");
+			}
+		}
+	});
 
-	// Check to see if OS is Android since gyro x/y axis are flipped (From Stack Overflow)
-	var ua = navigator.userAgent.toLowerCase();
-	var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
-	if(isAndroid) {
-		OS_Android = true;
-	}
+
 };
 
-// Motion Event Handler - Get gravity vector from accel / gyro
-function handleMotionEvent(event) {	
-	var axisflip = 1;
+// Final motion handler using global OS flags for device-specific corrections
+function handleMotionEvent(event) {
+	// Raw accelerometer data
+	let ax = event.accelerationIncludingGravity.x;
+	let ay = event.accelerationIncludingGravity.y;
 
-	if (OS_Android == true){
-		axisflip = -1;
-	}
-
-	var ax = event.accelerationIncludingGravity.x * axisflip;
-	var ay = event.accelerationIncludingGravity.y * -1 * axisflip;
-	var az = event.accelerationIncludingGravity.z;
-
-	// check to see if accelerationIncludingGravity is not supported
-	var accelcheck = ax + ay + az;
-
-	if (accelcheck == 0) {
+	// Exit if data is not available
+	if (ax === null || ay === null) {
 		tiltsupport = false;
+		return;
 	}
 
-	if (tiltsupport == false || tiltCheckbox.checked == false){ 
+	let finalX, finalY;
+
+	// --- Device-Specific Logic ---
+
+	// iPad Pro: Axes are swapped 90 degrees.
+	if (OS_iPAD) {
+		// Y-axis sensor data (ay) controls the screen's X-axis.
+		// X-axis sensor data (ax) controls the screen's Y-axis.
+	//finalX = ay;
+	//finalY = ax;
+	finalX = ax;
+	finalY = ay;
+		
+	}
+	// Google Pixel Tablet (Android): Both axes are reversed.
+	else if (OS_Android) {
+		// X-axis is reversed.
+		// Y-axis is reversed.
+		finalX = -ax;
+		finalY = -ay;
+	}
+	// Default for other devices (e.g., iPhone)
+	else {
+		finalX = ax;
+		finalY = ay;
+	}
+
+	// --- Apply to Simulation ---
+	if (tiltsupport == false || tiltEnabled == false) {
 		gravityVec.x = 0;
-		gravityVec.y = 9.8 * gravity_scale * sim_scale;
-		tiltCheckbox.checked = false; // uncheck if gravity vector not supported
-	} else {		
-		gravityVec.x = ax * gravity_scale*sim_scale;
-		gravityVec.y = ay * gravity_scale*sim_scale;
-		tiltsupport = true;
+		gravityVec.y = 9.8 * gravity_scale;
+	} else {
+		// The simulation's Y-axis is inverted relative to the sensor standard.
+		// We apply that inversion here to the final Y value for all devices.
+		gravityVec.x = finalX * gravity_scale * sim_scale;
+		gravityVec.y = -finalY * gravity_scale * sim_scale;
 	}
 }
 	
@@ -340,9 +486,11 @@ var Simulation = function(context){
 	var height = context.canvas.height - bottomBorderHeight; 
 	
 	// Energy loss on collision (1=elastic)
-	var damping = 0.8;	
+//	var damping = 0.8;	
+	var damping = 0.7;
+
 	var interval;
-	
+		
 	// for interior collision detection
 	var walls = new Array();	
 	
@@ -359,7 +507,7 @@ var Simulation = function(context){
 	var colors = ['#0000ff', '#ff0000', '#00ff00', '#ffa500'];	
 	
 	// Max number of balls on screen. 
-	const balls_Max = 100;
+	const balls_Max = 150;
 	
 	while(bodies.length < balls_Max){
 
@@ -368,6 +516,7 @@ var Simulation = function(context){
 		
 		// Load balls to the left of funnel to avoid generation onto wall
 		var bodyX = Math.random() * (width/4) + 25; 
+		//var bodyX = Math.random() * (width/2) + 25; 
 		var bodyY = Math.random() * (height/2) + 25;
 		
 		var bodyRadius = Math.random() * 20 + 6; 
@@ -408,14 +557,22 @@ var Simulation = function(context){
 	var bottomBorder = new Line(new Vector2D(0,height),new Vector2D(width,height));
 
 	// Interior angled walls with collision detection (i.e. The Funnel)
-	while(walls.length < 2 ){
+	while(walls.length < 1 ){
 
+		// Funnel 1
 		// Scaling for width and height
 		var wall1=new Wall(new Vector2D((width/3),height/6),new Vector2D((width/2.2),height/3.5));
 		walls.push(wall1);
 			
 		var wall2=new Wall(new Vector2D(width*0.68,height/6),new Vector2D((width/1.8),height/3.5));
 		walls.push(wall2);
+			
+		//Funnel 2
+		var wall3=new Wall(new Vector2D(width/3,height/2),new Vector2D((width/2.2),height/2.5));
+		walls.push(wall3);	
+		
+		var wall4=new Wall(new Vector2D(width*0.68,height/2),new Vector2D((width/1.8),height/2.5));
+		walls.push(wall4);	
 	}
 		
 	if (initwallcheck == false){ 
@@ -741,7 +898,7 @@ var Simulation = function(context){
 		context.clearRect(0, 0, width, height + bottomBorderHeight);
 		context.strokeStyle = 'rgba(0, 0, 0, 0.5)';
 		context.fillStyle = 'rgba(234, 151, 43, 1.0)';
-		var k = 0.008; // Spring constant for drag spring force
+		var k = 0.004; // Spring constant for drag spring force
 		var objToTouchVec = new Vector2D(0,0);
 			
 		// Draw bottom border
@@ -828,6 +985,13 @@ var Simulation = function(context){
 	*	move the object by its inertia and preserve its impulse when constrained.
 	*/		
 	var step = function(){
+
+		// Pause Simulation in Landscape mode on mobile devices
+		if (isMobileDevice() && isLandscape()) {
+			return; // Skip simulation steps
+		}
+
+		//if (simulationPaused) return; // Do not run if in Landscape on mobile device
 		var steps = 2; // 2 original steps; increase steps per interval for increased accuracy
 		var delta = 1/steps;
 		for(var i=0; i<steps; i++){
@@ -857,15 +1021,16 @@ var Simulation = function(context){
 	*/
 
 	function end(fps, panic) {
-		if (orientchk == false && tiltsupport == true){
-			var notifytxt = ", Turn on device rotation lock in Portrait Mode when using Tilt mode!"
-			} else {
-			notifytxt = " ";
-		}
+		
+		// Notify if simulation is paused in Landscape mode or display Mainloop FPS Counter
+		
+		const inLandscape = isMobileDevice() && isLandscape();
 
-		// Mainloop FPS counter text
-		fpsCounter.textContent = parseInt(fps, 10) + ' FPS' + notifytxt; 
-//		fpsCounter.textContent = parseInt(troubleshooting, 10) + ' Troubleshooting'; // Use FPS text to temporarily display "test" value
+		if (inLandscape) {
+			fpsCounter.textContent = "Paused - Rotate to or lock in Portrait";
+			} else {
+				fpsCounter.textContent = parseInt(fps, 10) + ' FPS';
+			}
 
 		if (panic) {
 		// This pattern introduces non-deterministic behavior, but in this case
