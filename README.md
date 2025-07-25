@@ -11,7 +11,7 @@ By Jeff Miller. Released under MIT License.
 - Balls move based on gravity vector when tilted on a mobile device after pressing the "Enable Tilt" button is pressed. If mobile device is in landscape, the simulation is paused and user is prompted to rotate to Portrait. Recommend turning orientation lock on in portrait mode. On iOS devices, you will be prompted for permission to use the gyro. 
 - Desktop users without an accelerometer have the option to turn "Gravity" on and off which creates some interesting effects
   
-[Click here to run the Demo!](https://jmogl.github.io/VerletBallPhysicsDemoTesting/)	
+[Click here to run the Demo!](https://jmogl.github.io/VerletBallPhysicsDemo/)	
 
 **References:**
 - [Verlet Collision with Impulse Preservation](https://web.archive.org/web/20180118011218/http://codeflow.org/entries/2010/nov/29/verlet-collision-with-impulse-preservation/), an excellent physics tutorial by Florian Boesch. Approach to solving instability when objects are at rest.
